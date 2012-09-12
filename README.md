@@ -5,7 +5,7 @@ Physical Interaction Project at KTH for DH2400. The purpose of this project is t
 
 <img src="http://f.cl.ly/items/0m0t350N2D2i2Q2B0F0O/Bench%20Concept.png"/>
 
-A checklist of some things we need to do to make this project a reality.
+A checklist of some things we need to do to make this project a reality:
 <ul>
 	<li>Check with SL or Library to see if we can make this public instalation in a couple weeks</li>
 	<li>Order RGB LEDs, drives, temperature sensors, wiring, enclosures, etc</li>

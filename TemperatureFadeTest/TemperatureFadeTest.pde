@@ -1,65 +1,115 @@
-/*
-  AnalogReadSerial
- Reads an analog input on pin 0, prints the result to the serial monitor 
- 
- This example code is in the public domain.
- */
- 
 const int sensorPin = A0;
-const int ledPin = 11;
+const int ledPin = 13;
 
- // Using a 10k Ohm resistor
-int sensorValue = 0;         // the sensor value
-int sensorMin = 550; // 525 (ambient room temp)
-int sensorMax = 550; // 575 (Daniel's butt temp on cloth chair)
+// These min/max values are set to 1024 and 0 respectively,
+//  so that when the program starts they will be calibrated to
+//  room temperature. During testing we found ambient room "temp"
+//  when using a 10k Ohm resistor to be about 525, and 575 when
+//  someone was sitting on it.
+int sensorValue = 0;
+int baseline = 0; // set to a high temperature so it will be increased during calibration
+const int addedHeatOfPerson = 50; // 575 (Daniel's butt temp on cloth chair) - 525 (abient room temp)
+int minTemp, maxTemp;
+
+// BEGIN smoothing initalization code ------------------------------------
+/*
+
+  Smoothing
+
+  Reads repeatedly from an analog input, calculating a running average
+  and printing it to the computer.  Keeps ten readings in an array and 
+  continually averages them.
+
+  Created 22 April 2007
+  By David A. Mellis  <dam@mellis.org>
+  modified 9 Apr 2012
+  by Tom Igoe
+  http://www.arduino.cc/en/Tutorial/Smoothing
+  
+  This example code is in the public domain.
+  
+  
+*/
+
+// Define the number of samples to keep track of.  The higher the number,
+// the more the readings will be smoothed, but the slower the output will
+// respond to the input.  Using a constant rather than a normal variable lets
+// use this value to determine the size of the readings array.
+const int numReadings = 10;
+
+int readings[numReadings];      // the readings from the analog input
+int index = 0;                  // the index of the current reading
+int total = 0;                  // the running total
+int smoothedTemp = 0;                // the average
+
+// END smoothing initalization code ------------------------------------
 
 
 void setup() {
   Serial.begin(9600);
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, HIGH);
+  
+  // Initialize smoothing readings
+  for (int thisReading = 0; thisReading < numReadings; thisReading++)
+    readings[thisReading] = 0;  
   
   Serial.println("\n--------------------\nCalibrating..."); 
   
-   // calibrate during the first five seconds 
-   while (millis() < 5000) {
+   // calibrate room temperature during the first three seconds 
+   while (millis() < 3000) {
+     
      sensorValue = analogRead(sensorPin);
     
-     // record the maximum sensor value
-     if (sensorValue > sensorMax) {
-       sensorMax = sensorValue;
-     }
-    
-     // record the minimum sensor value
-     if (sensorValue < sensorMin) {
-       sensorMin = sensorValue;
-     }
+     // record the highest sensor value at room temp
+     if (sensorValue > baseline)
+       baseline = sensorValue;
+
      
-     if((millis()/100) % 2)
+     // Flash the LED so we know it's calibrating
+     if((millis()/200) % 2)
        analogWrite(ledPin, HIGH);
-    else
+     else
        analogWrite(ledPin, LOW);
+       
    }
+
+   minTemp = baseline;
+   maxTemp = baseline + addedHeatOfPerson;
    
-   Serial.print("min [");
-   Serial.print(sensorMin);
-   Serial.print(", ");
-   Serial.print(sensorMax);
-   Serial.println("] max");
+   String debugString;
+   debugString = "Calibrated: min [" + minTemp;
+   debugString += ", " + maxTemp;
+   debugString += "] max\n";
+   Serial.println(debugString);
    
-   Serial.println("Done calibrating! Begining run loop!");
 }
 
 void loop() {
   
-  // read the sensor:
-  sensorValue = analogRead(sensorPin);
-  
+  // BEGIN smoothing code ------------------------------------
+  // subtract the last reading:
+  total= total - readings[index];         
+  // read from the sensor:  
+  readings[index] = analogRead(sensorPin); 
+  // add the reading to the total:
+  total= total + readings[index];       
+  // advance to the next position in the array:  
+  index = index + 1;                    
+
+  // if we're at the end of the array wrap around to the beginning
+  if (index >= numReadings)              
+    index = 0;
+                      
+  // calculate the average:
+  smoothedTemp = total / numReadings;   
+  // END smoothing code ------------------------------------
+
   // Print it for debugging purposes
-  Serial.println(sensorValue, DEC);
+  Serial.println(smoothedTemp, DEC);
 
   // apply the calibration to the sensor reading
-  sensorValue = map(sensorValue, sensorMin, sensorMax, 0, 255);
+  sensorValue = map(smoothedTemp, minTemp, maxTemp, 0, 255);
 
   // in case the sensor value is outside the range seen during calibration
   sensorValue = constrain(sensorValue, 0, 255);
@@ -67,8 +117,10 @@ void loop() {
   // fade the LED using the calibrated value:
   analogWrite(ledPin, sensorValue);
   
-  Serial.print("LED = ");
-  Serial.print(sensorValue / 2.55);
-  Serial.println("%");
+  int ledPercent = (sensorValue / 2.55);
+  String debugString = "LED = " + ledPercent;
+  debugString += "%";
+  Serial.println(debugString);
   
+  delay(1); // delay helps read the sensor more accurately
 }
