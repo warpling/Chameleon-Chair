@@ -4,17 +4,17 @@
   Released into the public domain.
 */
 
-#ifndef Morse_h
-#define Morse_h
+#ifndef PersonDetector_h
+#define PersonDetector_h
 
 #include "Arduino.h"
 
-class Morse
+class PersonDetector
 {
   public:
-    Morse(int pin);
-    void dot();
-    void dash();
+    PersonDetector(int pin);
+    void calibrate(int addedHeatOfPerson);
+    bool isPersonPresent();
   private:
     int _pin;
 };

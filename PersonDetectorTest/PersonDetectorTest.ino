@@ -1,16 +1,21 @@
 #include <PersonDetector.h>
 
-PersonDetector detector = PersonDetector(); // Initialize an instance of the class
 
-void setup(){
+PersonDetector detector(); // Initialize an instance of the class
 
-	detector.calibrate(40);
+void setup()
+{
+  //detector.calibrate(40);
+  detector.calibrate(/*10*/);
 }
 
-void loop(){
+void loop()
+{
+  /*
   boolean isPerson = detector.isPersonPresent();
     
   Serial.println(isPerson);
+  */
   
   delay(250);
 }

@@ -11,7 +11,8 @@ int highThreshold  = 0;
 int max            = 0;
 
 //<<constructor>> setup the sensor, make pin A0 an INPUT
-PersonDetector::PersonDetector(){
+PersonDetector::PersonDetector()
+{
     pinMode(SENSOR_PIN, INPUT); //make that pin an INPUT
 }
 
@@ -38,6 +39,6 @@ void PersonDetector::calibrate(int addedHeatOfPerson){
 }
 
 // return true if we think there's a person on the seat, false otherwise
-void PersonDetector::isPersonPresent(){
+bool PersonDetector::isPersonPresent(){
 	return false; // hardcoded for now
 }
