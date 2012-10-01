@@ -1,3 +1,4 @@
+#include <Printf.h>
 #include <PersonDetector.h>
 
 PersonDetector detector(0);  //You have to pass an int. For now we pass in 0 and do nothing.
@@ -11,7 +12,7 @@ void setup()
 void loop()
 {
    boolean isPerson = detector.isPersonPresent();
-   Serial.println(isPerson);
+   Serial_printf("Value: %d\n", isPerson);
    delay(250);
 }
 
