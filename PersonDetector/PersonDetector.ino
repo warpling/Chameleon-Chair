@@ -4,7 +4,7 @@ PersonDetector detector(0);  //You have to pass an int. For now we pass in 0 and
 
 void setup()
 {
-  Serial.begin(96-00);
+  Serial.begin(9600);
   detector.calibrate(20);
 }
 
