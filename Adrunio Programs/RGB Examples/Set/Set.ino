@@ -7,15 +7,17 @@ void setup() {
 }
 
 void loop() {
-  byte red[] = {255, 0, 0};
-  byte green[] = {0, 255, 0};
-  byte blue[] = {0, 0, 255};
+  byte red[] = {0, 255, 255};
+  byte green[] = {255, 0, 255};
+  byte blue[] = {255, 255, 0};
 
   
   // Blink
-  LED1.Fade(LEDArray, red , green, 30); 
-  delay(3000);
-  LED1.Fade(LEDArray, green , blue, 30);
-  delay(3000);
-  LED1.Fade(LEDArray, blue , red, 30);
+  LED1.set_Color(LEDArray, red); 
+  delay(5000);
+  LED1.set_Color(LEDArray, green);
+  delay(5000);
+  LED1.set_Color(LEDArray, blue);
+  delay(5000);
+
 }
