@@ -2,10 +2,11 @@
 #include <Printf.h>
 #include <PersonDetector.h>
 
-int SpotlightArray[] = {9, 10, 11};
-byte red[] = {255, 0, 0};
-byte green[] = {0, 255, 0};
-byte blue[] = {0, 0, 255};
+int SpotlightArray[] = {12, 11, 10};
+byte red[] = {0, 255, 255};
+byte green[] = {255, 0, 255};
+byte blue[] = {255, 255, 0};
+byte off[] = {255, 255, 255};
 
 boolean wasPerson = false;
 byte *newColor = blue;
@@ -17,10 +18,8 @@ PersonDetector detector(0);  //You have to pass an int. For now we pass in 0 and
 void setup()
 {
   Serial.begin(9600);
+  Spotlight.set_Color(SpotlightArray, green);
   detector.calibrate(20);
-
-  Spotlight.Fade(SpotlightArray, lastColor, newColor, 3);
-
 }
 
 void loop()
@@ -28,18 +27,19 @@ void loop()
    boolean isPerson = detector.isPersonPresent();
    if(isPerson && !wasPerson) {
       newColor = red;
-      Spotlight.Fade(SpotlightArray, lastColor, newColor, 3);
+      Spotlight.set_Color(SpotlightArray, blue);
       lastColor = newColor;
       wasPerson = true;
    }
    else if (!isPerson && wasPerson) {
       newColor = blue;
-      Spotlight.Fade(SpotlightArray, lastColor, newColor, 3);
+      Spotlight.set_Color(SpotlightArray, red);
       lastColor = newColor;
       wasPerson = false;
    }
    else {
      // Do nothing
+     Spotlight.set_Color(SpotlightArray, blue);
    }
    
    delay(200);
