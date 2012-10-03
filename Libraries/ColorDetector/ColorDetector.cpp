@@ -71,8 +71,8 @@ RGB ColorDetector::getColor()
 			digitalWrite(ckPin, HIGH);  //clock rising edge (data change at rising edge)
 			delay(1);     //clock high state
 
-			//colorArray[i][k] = digitalRead(dataPin);  //read bit from sensor
-			colorArray[i][k] = bitRead(analogRead(1),0);  //read LSB bit from analog input as random data for testing purposes
+			colorArray[i][k] = digitalRead(dataPin);  //read bit from sensor
+			//colorArray[i][k] = bitRead(analogRead(1),0);  //read LSB bit from analog input as random data for testing purposes
 			
 			digitalWrite(ckPin, LOW); //clock falling edge
 			delay(1);        //clock low state
