@@ -17,9 +17,9 @@ int flashPin;
 int gateSensitivity;
 
 int colorArray[12][3];
-int red;
-int green;
-int blue;
+int _red;
+int _green;
+int _blue;
 RGB colorObject = { 0 , 0 , 0 };
 
 ColorDetector::ColorDetector(int _rangePin, int _gatePin, int _ck, int _dataPin, int _flashPin)
@@ -90,14 +90,14 @@ RGB ColorDetector::getColor()
 	  //collect bits from array to ints for each color
 	for (int i=0; i<12; i++)
 	{
-		bitWrite(red, i, colorArray[i][0]);
-		bitWrite(green, i, colorArray[i][1]);
-		bitWrite(blue, i, colorArray[i][2]);
+		bitWrite(_red, i, colorArray[i][0]);
+		bitWrite(_green, i, colorArray[i][1]);
+		bitWrite(_blue, i, colorArray[i][2]);
 	}
 
-	colorObject.r = red;
-	colorObject.g = green;
-	colorObject.b = blue;
+	colorObject.r = _red;
+	colorObject.g = _green;
+	colorObject.b = _blue;
 
 	//Return red, green, blue values parsed in an RGB object
 	return colorObject;

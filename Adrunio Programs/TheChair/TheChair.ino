@@ -4,6 +4,8 @@
 #include <ColorDetector.h>
 #include <Printf.h>
 #include <PersonDetector.h>
+#include <LED.h>
+#include <RGB.h>
 
 
 // Globals
@@ -15,20 +17,28 @@ const int Range = 6;
 const int Gate = 7;
 const int CK = 8;
 const int DataIn = 3;
+RGB rgbObject;
 
 // 2. PersonDetector
 const byte tempSensorPin = A0;
 
 // 3. LED
-
+int LEDArray[] = {9,10,11}; // Red, Green, Blue
+LED LED1(LEDArray);
+//byte prevColor[3] = {0,0,0};
+byte endColor[3] = {0,0,0};
 
 // Target color components (holds R,G,B values the target color consists of)
-int _red;
-int _green;
-int _blue;
+int __red;
+int __green;
+int __blue;
 
-//   - light intensity
+// Light intensity (how close are we to the target color)
+double intensity = 0.0;
+
+// Is there and was there a person in the chair?
 boolean isPerson;
+boolean wasPerson;
 
 // Setup
 //   Main Calibration
@@ -48,31 +58,41 @@ void setup()
 
 }
 
-// Loop
-
-//
-//   Check if person is detected
-
-//   If person is sitting incremement brightness
-
-//   Set LEDs to new target color/brightness
 void loop()
 {
+   //   Check if person is detected
    isPerson = detector.isPersonPresent();
    Serial_printf("Value: %d\n", isPerson);
    if(isPerson)
    {
-     // If person detected and wasn't there before, take color reading (do colorspace calculations, etc)
-     _red = colorDetector.getColor().r;
-     _green = colorDetector.getColor().g;
-     _blue = colorDetector.getColor().b;
-     Serial_printf("Target color value = %d - %d - %d\n", _red, _green, _blue);
+     // If person detected and wasn't there before, take color reading (do colorspace calculations, etc)     
+     rgbObject = colorDetector.getColor();
+     __red = rgbObject.r   / 16;
+     __green = rgbObject.g / 16;
+     __blue = rgbObject.b  / 16;
+    
+     Serial_printf("Target color value = %d - %d - %d\n", __red, __green, __blue);
      
-     //wasPerson = true;
+     //This color should be the endresult of the fade
+     endColor[0] = __red;
+     endColor[1] = __green;
+     endColor[2] = __blue;
+     
+     // Next increment brightness
+     if(isPerson)
+       
+     
+     //LED1.set_Color(LEDArray, );
+     
+     
+     //Set some historic context
+     wasPerson = true;
      
    }else if (isPerson == false /*&& wasPerson == true*/)
    {
      // If person no longer sitting, decrement brightness
+     delay(500);
+     
      
      //wasPerson = false;
    }
