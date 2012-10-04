@@ -4,7 +4,7 @@ int LEDflash = 13;
 int Range = 6;
 int Gate = 7;
 int CK = 8;
-int DataIn = 9;
+int DataIn = 3;
 
 int _red;
 int _green;
