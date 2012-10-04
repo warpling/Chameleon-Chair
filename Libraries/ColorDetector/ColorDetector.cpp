@@ -20,7 +20,7 @@ int colorArray[12][3];
 int red;
 int green;
 int blue;
-RGB colorObject = { 10 , 0 , 10 };
+RGB colorObject = { 0 , 0 , 0 };
 
 ColorDetector::ColorDetector(int _rangePin, int _gatePin, int _ck, int _dataPin, int _flashPin)
 {
@@ -36,6 +36,8 @@ ColorDetector::ColorDetector(int _rangePin, int _gatePin, int _ck, int _dataPin,
 	pinMode(dataPin, INPUT);
 	pinMode(rangePin, OUTPUT);
 	pinMode(gatePin, OUTPUT);
+	pinMode(ckPin, OUTPUT);
+	pinMode(flashPin, OUTPUT);
 }
 
 void setSensitivity(int sense)
@@ -55,7 +57,7 @@ RGB ColorDetector::getColor()
 	digitalWrite (ckPin, LOW);
 
 	//Operating sequence 2 - set sensitivity
-	digitalWrite(rangePin, LOW); // hardcoded for now
+	digitalWrite(rangePin, HIGH); // hardcoded for now
 	delay(5);
 
 	//Operating sequence 3 - integrate light
@@ -86,18 +88,17 @@ RGB ColorDetector::getColor()
 
 
 	  //collect bits from array to ints for each color
-	for (int i=0; i<12; i++){
+	for (int i=0; i<12; i++)
+	{
 		bitWrite(red, i, colorArray[i][0]);
-		colorObject.r = red;
-
 		bitWrite(green, i, colorArray[i][1]);
-		colorObject.g = green;
-
 		bitWrite(blue, i, colorArray[i][2]);
-		colorObject.b = blue;
 	}
+
+	colorObject.r = red;
+	colorObject.g = green;
+	colorObject.b = blue;
 
 	//Return red, green, blue values parsed in an RGB object
 	return colorObject;
 }
-

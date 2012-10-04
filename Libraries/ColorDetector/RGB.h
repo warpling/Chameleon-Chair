@@ -11,9 +11,9 @@
 
 
 struct RGB {
-	byte r;
-	byte g;
-	byte b;
+	int r;
+	int g;
+	int b;
 };
 
 #endif
