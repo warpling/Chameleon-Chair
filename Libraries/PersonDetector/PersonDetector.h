@@ -12,11 +12,10 @@
 class PersonDetector
 {
   public:
-    PersonDetector(int pin);
+    PersonDetector(byte _tempSensorPin);
     void calibrate(int addedHeatOfPerson);
+	byte getThermistorPin();
     bool isPersonPresent();
-  private:
-    int _pin;
 };
 
 #endif

@@ -7,7 +7,7 @@
 #include "Arduino.h"
 #include "PersonDetector.h"
 
-const byte SENSOR_PIN = A0; //use the thermistor @ Arduino pin Analog 0
+byte SENSOR_PIN; // Will hold analog thermistor pin
 int min            = 0;
 int lowThreshold   = 0;
 int highThreshold  = 0;
@@ -16,9 +16,15 @@ int max            = 0;
 int sensorValue;
 
 
-PersonDetector::PersonDetector(int pin)
+PersonDetector::PersonDetector(byte _tempSensorPin)
 {
+	SENSOR_PIN = _tempSensorPin;
     pinMode(SENSOR_PIN, INPUT);
+}
+
+byte PersonDetector::getThermistorPin()
+{
+	return SENSOR_PIN;
 }
 
 void PersonDetector::calibrate(int addedHeatOfPerson)
