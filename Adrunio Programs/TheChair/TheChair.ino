@@ -14,7 +14,7 @@ const int LEDflash = 13;
 const int Range = 6;
 const int Gate = 7;
 const int CK = 8;
-const int DataIn = 9;
+const int DataIn = 3;
 
 // 2. PersonDetector
 const byte tempSensorPin = A0;
@@ -66,7 +66,7 @@ void loop()
      _red = colorDetector.getColor().r;
      _green = colorDetector.getColor().g;
      _blue = colorDetector.getColor().b;
-     Serial_printf("Target color value = %d - %d - %d", _red, _green, _blue);
+     Serial_printf("Target color value = %d - %d - %d\n", _red, _green, _blue);
      
      //wasPerson = true;
      
