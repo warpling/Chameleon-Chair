@@ -92,26 +92,26 @@ void loop()
      //-----------------------------------------------------------------------------------------------
        
        // Find the biggest value and maximize it
-       String maximumIndex = 0;
-       String maximumValue = __red;
+       int maximumIndex = 0;
+       int maximumValue = __red;
 
        if(__green > maximumValue)
          maximumIndex = 1;
        if(__blue > maximumValue)
          maximumIndex = 2;
          
-       newColor[maximumIndex] = 255;
+       targetColor[maximumIndex] = 255;
        
        // Find the biggest value and zero it
-       String minimumIndex = 0;
-       String minimumValue = __red;
+       int minimumIndex = 0;
+       int minimumValue = __red;
 
        if(__green < minimumValue)
          minimumIndex = 1;
        if(__blue < minimumValue)
          minimumIndex = 2;
          
-       newColor[minimumIndex] = 0;
+       targetColor[minimumIndex] = 0;
         
      //-----------------------------------------------------------------------------------------------
     
@@ -136,7 +136,7 @@ void loop()
     
      //After calculations set the color of the chair to the new color
      LED1.set_Color(LEDArray, currentColor);
-     delay(colorChangeDelay);
-   }
+     delay(loopDelay);
 }
+
 
