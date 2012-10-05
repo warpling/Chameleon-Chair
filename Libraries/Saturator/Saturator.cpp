@@ -11,6 +11,7 @@
 
 #include "Saturator.h";
 #include <Printf.h>;
+#include <stdint.h>;
 // constants here
 
   Saturator::Saturator()
@@ -82,8 +83,10 @@ struct rgb_color Saturator::hsv_to_rgb (struct hsv_color hsv)
 
     int v;
 
-    v = (lum < 128) ? (lum * (256 + sat)) / 256 :
-          (((lum + sat) * 256) - lum * sat) / 256;
+    uint16_t lumsat = lum * sat;
+    v = (lum < 128) ? (lum * (256 + sat)) / 256 : (((lum + sat) * 256) - lumsat) / 256;
+
+    Serial_printf("hue: %d | sat: %d | val: %d\n", hue, sat, lum);
     Serial_printf("v: %d\n", v);
 
     if (v <= 0) {
