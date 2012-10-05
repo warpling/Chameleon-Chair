@@ -86,9 +86,6 @@ struct rgb_color Saturator::hsv_to_rgb (struct hsv_color hsv)
     uint16_t lumsat = lum * sat;
     v = (lum < 128) ? (lum * (256 + sat)) / 256 : (((lum + sat) * 256) - lumsat) / 256;
 
-    Serial_printf("hue: %d | sat: %d | val: %d\n", hue, sat, lum);
-    Serial_printf("v: %d\n", v);
-
     if (v <= 0) {
         rgbColor.r = rgbColor.g = rgbColor.b = 0;
     } else {
@@ -103,7 +100,6 @@ struct rgb_color Saturator::hsv_to_rgb (struct hsv_color hsv)
         vsf = v * fract * (v - m) / v >> 8;
         mid1 = m + vsf;
         mid2 = v - vsf;
-        Serial_printf("sextant: %d\n", sextant);
         switch (sextant) {
            case 0: rgbColor.r = v;    rgbColor.g = mid1; rgbColor.b = m;    return rgbColor;
            case 1: rgbColor.r = mid2; rgbColor.g = v;    rgbColor.b = m;    return rgbColor;
