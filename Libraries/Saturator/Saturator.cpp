@@ -16,32 +16,27 @@
 
   Saturator::Saturator()
   {
-  // initialization here
+    // initialization here
   }
 
-  // saturates the passed in RGB color (0 - 255)
+  // saturates the passed in RGB color (0 - 255) using the HSV color space
+  // and then converts it back to RGB.
   rgb_color Saturator::saturate (int red, int green, int blue)
   {
 
     struct rgb_color rgbColor = {red, green, blue};
     struct hsv_color hsvColor = {0, 0, 0};
 
+    // Convert to HSV
+    hsvColor = rgb_to_hsv(rgbColor);
 
-    //hsvColor = rgb_to_hsv(rgbColor);
+    // Max out the saturation and brightness value so
+    // we get a nice bright saturated color
+    hsvColor.sat = 255;
+    hsvColor.val = 255;
 
-    hsvColor.hue = red;
-    hsvColor.sat = green;
-    hsvColor.val = blue;
-
-    //hsvColor.sat = 255;
-    //hsvColor.val = 255;
-
+    // Convert back to RGB
     rgbColor = hsv_to_rgb(hsvColor);
-
-    // for testing
-    // rgbColor.r = hsvColor.hue;
-    // rgbColor.g = hsvColor.sat;
-    // rgbColor.b = hsvColor.val;
 
     return rgbColor;
 }
@@ -78,41 +73,57 @@ struct hsv_color Saturator::rgb_to_hsv (struct rgb_color rgb) {
 struct rgb_color Saturator::hsv_to_rgb (struct hsv_color hsv)
 {
 
-    int hue = hsv.hue;
-    int sat = hsv.sat;
-    int lum = hsv.val;
+    double h = 360 * (hsv.hue/255.0);
+    double s = hsv.sat / 255.0;
+    double v = hsv.val / 255.0;
 
     struct rgb_color rgbColor;
 
-    int v;
+    int i;
+    float f, p, q, t;
+    if( s == 0 ) {
+        // achromatic (grey)
+        rgbColor.r = rgbColor.g = rgbColor.b = 255 * v;
+        return rgbColor;
+    }
+    h /= 60;            // sector 0 to 5
+    i = floor( h );
+    f = h - i;          // factorial part of h
+    p = v * ( 1 - s );
+    q = v * ( 1 - s * f );
+    t = v * ( 1 - s * ( 1 - f ) );
 
-    uint16_t lumsat = lum * sat;
-    v = (lum < 128) ? (lum * (256 + sat)) / 256 : (((lum + sat) * 256) - lumsat) / 256;
-
-    Serial_printf("V: %d\n", v);
-
-    if (v <= 0) {
-        rgbColor.r = rgbColor.g = rgbColor.b = 0;
-    } else {
-        int m;
-        int sextant;
-        int fract, vsf, mid1, mid2;
-
-        m = lum + lum - v;
-        hue *= 6;
-        sextant = hue >> 8;
-        fract = hue - (sextant << 8);
-        vsf = v * fract * (v - m) / v >> 8;
-        mid1 = m + vsf;
-        mid2 = v - vsf;
-        switch (sextant) {
-           case 0: rgbColor.r = v;    rgbColor.g = mid1; rgbColor.b = m;    return rgbColor;
-           case 1: rgbColor.r = mid2; rgbColor.g = v;    rgbColor.b = m;    return rgbColor;
-           case 2: rgbColor.r = m;    rgbColor.g = v;    rgbColor.b = mid1; return rgbColor;
-           case 3: rgbColor.r = m;    rgbColor.g = mid2; rgbColor.b = v;    return rgbColor;
-           case 4: rgbColor.r = mid1; rgbColor.g = m;    rgbColor.b = v;    return rgbColor;
-           case 5: rgbColor.r = v;    rgbColor.g = m;    rgbColor.b = mid2; return rgbColor;
-        }
+    switch( i ) {
+        case 0:
+            rgbColor.r = 255 * v;
+            rgbColor.g = 255 * t;
+            rgbColor.b = 255 * p;
+            return rgbColor;
+        case 1:
+            rgbColor.r = 255 * q;
+            rgbColor.g = 255 * v;
+            rgbColor.b = 255 * p;
+            return rgbColor;
+        case 2:
+            rgbColor.r = 255 * p;
+            rgbColor.g = 255 * v;
+            rgbColor.b = 255 * t;
+            return rgbColor;
+        case 3:
+            rgbColor.r = 255 * p;
+            rgbColor.g = 255 * q;
+            rgbColor.b = 255 * v;
+            return rgbColor;
+        case 4:
+            rgbColor.r = 255 * t;
+            rgbColor.g = 255 * p;
+            rgbColor.b = 255 * v;
+            return rgbColor;
+        default:        // case 5:
+            rgbColor.r = 255 * v;
+            rgbColor.g = 255 * p;
+            rgbColor.b = 255 * q;
+            return rgbColor;
     }
 }
 
