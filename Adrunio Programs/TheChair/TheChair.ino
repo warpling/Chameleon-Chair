@@ -6,7 +6,7 @@
 #include <PersonDetector.h>
 #include <LED.h>
 #include <RGB.h>
-
+#include <Saturator.h>
 
 // Globals
 
@@ -22,7 +22,7 @@ RGB rgbObject;
 // 2. PersonDetector
 const byte tempSensorPin = A0;
 
-// 3. LED
+// 3. LEDs
 int LEDArray[] = {9,10,11}; // Red, Green, Blue pins used on Arduino Board
 LED LED1(LEDArray);
 byte targetColor[3] = {0,0,0};  //In RGB
@@ -35,12 +35,12 @@ int __green;
 int __blue;
 
 // Light intensity (how close are we to the target color)
-double intensity = 0.0;
-int intensityIncrement = .05;
-int loopDelay = 20;
+double    intensity          = 0.0;
+const int intensityIncrement = .025;
+const int loopDelay          = 10;
 
 // Is there and was there a person in the chair?
-boolean isPerson = false;
+boolean isPerson  = false;
 boolean wasPerson = false;
 
 // Setup
@@ -51,46 +51,44 @@ boolean wasPerson = false;
 //  - calibrate any other libraries with sensitivites, pins, etc
 
 
-//Create custom objects
-ColorDetector colorDetector(Range, Gate, CK, DataIn, LEDflash); // Pass color detection related pins to colordetector 
-PersonDetector detector(tempSensorPin);  //Pass thermistor pin to persondetector constructor
+// Initalize Library objects with pinouts
+ColorDetector  colorDetector(Range, Gate, CK, DataIn, LEDflash); // Pass color detection related pins to colordetector 
+PersonDetector detector(tempSensorPin);                          // Pass thermistor pin to persondetector constructor
+Saturator      saturator();                                      // No initialization required
 
 void setup()
 {
-  Serial.begin(9600);  
+  Serial.begin(9600);
 }
 
 void loop()
 {
-   //   Check if person is detected
-   wasPerson = isPerson;  //wasPerson will hold the previous isPerson value
-   isPerson = detector.isPersonPresent();
-   Serial_printf("Is there a person? (0 = no, 1 = yes) : %d\n", isPerson);
-   
-   
-   //isPerson=true; //DEBUGGING STATEMENT, REMOVE AFTER USAGE
+   isPerson = detector.isPersonPresent(); // Check if person is detected
 
-  
+   if(isPerson)
+      Serial_printf("Person: YES\n");
+   else
+      Serial_printf("Person: NO\n");
    
    if(isPerson && !wasPerson) //A new person sits down
    {
-     Serial_printf("PERSON SITS FIRST TIME");
+     Serial_printf("PERSON SITTING FOR FIRST TIME");
+     
      // If person detected and wasn't there before, take color reading (do colorspace calculations, etc)     
      rgbObject = colorDetector.getColor();
-     __red = rgbObject.r   / 16;
-     __green = rgbObject.g / 16;
-     __blue = rgbObject.b  / 16;
+     rgbObject.r /= 16;
+     rgbObject.g /= 16;
+     rgbObject.b /= 16;
 
     // PLAN A : HSB ADJUSTMENT
     //-----------------------------------------------------------------------------------------------
-
+    rgbObject = saturator.saturate(rgbObject);
     //-----------------------------------------------------------------------------------------------
-
 
      
      // PLAN B : COLOR ADJUSTMENT FOR SATURATION BOOST
      //-----------------------------------------------------------------------------------------------
-       
+      /*
        // Find the biggest value and maximize it
        int maximumIndex = 0;
        int maximumValue = __red;
@@ -112,15 +110,14 @@ void loop()
          minimumIndex = 2;
          
        targetColor[minimumIndex] = 0;
-        
+      */  
      //-----------------------------------------------------------------------------------------------
     
-     Serial_printf("New target color value = %d - %d - %d\n", __red, __green, __blue);
-     
-     //This color should be used as reference for the loop
-     targetColor[0] = __red;
-     targetColor[1] = __green;
-     targetColor[2] = __blue;
+     targetColor[0] = rgbObject.r;
+     targetColor[1] = rgbObject.g;
+     targetColor[2] = rgbObject.b;
+
+     Serial_printf("New target color value = %d - %d - %d\n", targetColor[0], targetColor[1], targetColor[2]);     
   }
   else if (isPerson && wasPerson) {
     intensity += intensityIncrement;
@@ -134,9 +131,10 @@ void loop()
      currentColor[i] = intensity * targetColor[i];
   }
     
-     //After calculations set the color of the chair to the new color
-     LED1.set_Color(LEDArray, currentColor);
-     delay(loopDelay);
-}
+  //After calculations set the color of the chair to the new color
+  LED1.set_Color(LEDArray, currentColor);
+  wasPerson = isPerson;  //wasPerson will hold the previous isPerson value
+  delay(loopDelay);
+  }
 
 
