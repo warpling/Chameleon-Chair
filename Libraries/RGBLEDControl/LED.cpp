@@ -38,7 +38,7 @@ void LED::set_Color(int LEDArray[], byte* rgb)
 {
 	// 255 - the value because our RGB LED is common anode, this means a colour is full on when we output analogWrite(Pin, 0)
 	for(int i = 0; i < 3; i++){
-    		analogWrite(LEDArray[i], 255 - rgb[i]);
+    		analogWrite(LEDArray[i], /*255 -*/ rgb[i]);
  	}
 }
 

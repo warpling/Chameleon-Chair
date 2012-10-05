@@ -23,7 +23,7 @@ RGB rgbObject;
 const byte tempSensorPin = A0;
 
 // 3. LED
-int LEDArray[] = {9,10,11}; // Red, Green, Blue
+int LEDArray[] = {9,10,11}; // Red, Green, Blue pins used on Arduino Board
 LED LED1(LEDArray);
 byte newColor[3] = {0,0,0};  //In RGB
 byte referenceColor[3] = {0,0,0};  //In RGB
@@ -65,6 +65,7 @@ void setup()
 void loop()
 {
    //   Check if person is detected
+   wasPerson = isPerson;  //wasPerson will hold the previous isPerson value
    isPerson = detector.isPersonPresent();
    Serial_printf("Value: %d\n", isPerson);
    
@@ -92,19 +93,24 @@ void loop()
      newColor[2] = ;
      */
      
-     //After calculations set the color of the chair to the new color
-     //LED1.set_Color(LEDArray, newColor);
-     delay(colorChangeDelay);
+     //Hardcoded red
+     newColor[0] = 190;
+     newColor[1] = 40;
+     newColor[2] = 50;
      
-     //Set some historic context, there was a person here
-     wasPerson = true;
+     //After calculations set the color of the chair to the new color
+     LED1.set_Color(LEDArray, newColor);
+     delay(colorChangeDelay);
    }
    else if(isPerson == true && wasPerson == true)  //Person still sitting there
    {
      // Increment brightness
      //LED1.set_Color(LEDArray, newColor);
      //change intermediate color variable by convert to HSB and add standard brightnessvalue
-     //newColor[3] = newColor[3] + brightnessChange;
+     if(newColor[1] < 255)
+     {
+       newColor[1] = newColor[1] + 1;
+     }
      delay(colorChangeDelay);
      
    }else if (isPerson == false && wasPerson == true)
@@ -112,12 +118,16 @@ void loop()
      // If person no longer sitting, decrement brightness after delay
      // Delay could be added here
      
-     
+     //Fade out color
+     for(int i=0; i<3; i++)
+     {
+       if(newColor[i] > 0)
+       {
+         newColor[i] = newColor[i] - 1;
+       }
+     }
      //Chnange intermediate color variable
      delay(colorChangeDelay);
-     
-     
-     wasPerson = false;
    }
    delay(250);
 }
