@@ -19,7 +19,7 @@
   // initialization here
   }
 
-// saturates the passed in RGB color (0 - 255)
+  // saturates the passed in RGB color (0 - 255)
   rgb_color Saturator::saturate (int red, int green, int blue)
   {
 
@@ -27,14 +27,18 @@
     struct hsv_color hsvColor = {0, 0, 0};
 
 
-    hsvColor = rgb_to_hsv(rgbColor);
+    //hsvColor = rgb_to_hsv(rgbColor);
+
+    hsvColor.hue = red;
+    hsvColor.sat = green;
+    hsvColor.val = blue;
 
     //hsvColor.sat = 255;
     //hsvColor.val = 255;
 
     rgbColor = hsv_to_rgb(hsvColor);
 
-    // for testing, super fucked up I know
+    // for testing
     // rgbColor.r = hsvColor.hue;
     // rgbColor.g = hsvColor.sat;
     // rgbColor.b = hsvColor.val;
@@ -74,7 +78,6 @@ struct hsv_color Saturator::rgb_to_hsv (struct rgb_color rgb) {
 struct rgb_color Saturator::hsv_to_rgb (struct hsv_color hsv)
 {
 
-    Serial_printf("test");
     int hue = hsv.hue;
     int sat = hsv.sat;
     int lum = hsv.val;
@@ -85,6 +88,8 @@ struct rgb_color Saturator::hsv_to_rgb (struct hsv_color hsv)
 
     uint16_t lumsat = lum * sat;
     v = (lum < 128) ? (lum * (256 + sat)) / 256 : (((lum + sat) * 256) - lumsat) / 256;
+
+    Serial_printf("V: %d\n", v);
 
     if (v <= 0) {
         rgbColor.r = rgbColor.g = rgbColor.b = 0;
