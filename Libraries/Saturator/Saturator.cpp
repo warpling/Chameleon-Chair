@@ -9,9 +9,9 @@
   HSV -> RGC Conversion code adapted from http://www.nunosantos.net/archives/114
 */
 
-#include "Saturator.h";
-#include <Printf.h>;
-#include <stdint.h>;
+#include "Saturator.h"
+#include <Printf.h>
+#include <stdint.h>
 // constants here
 
   Saturator::Saturator()
