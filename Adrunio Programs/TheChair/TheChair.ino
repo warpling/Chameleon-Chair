@@ -38,7 +38,7 @@ int __blue;
 int intensity;
 int maxBrightness = 100;  //Measured in percentages
 int brightnessChange = 10;
-int colorChangeDelay = 40;
+int colorChangeDelay = 20;
 
 // Is there and was there a person in the chair?
 boolean isPerson = false;
@@ -58,8 +58,7 @@ PersonDetector detector(tempSensorPin);  //Pass thermistor pin to persondetector
 
 void setup()
 {
-  Serial.begin(9600);
-
+  Serial.begin(9600);  
 }
 
 void loop()
@@ -70,16 +69,20 @@ void loop()
    Serial_printf("Value: %d\n", isPerson);
    
    
+   isPerson=true; //DEBUGGING STATEMENT, REMOVE AFTER USAGE
+
+  
    
    if(isPerson == true && wasPerson == false) //A new person sits down
    {
+     Serial_printf("PERSON SITS FIRST TIME");
      // If person detected and wasn't there before, take color reading (do colorspace calculations, etc)     
      rgbObject = colorDetector.getColor();
      __red = rgbObject.r   / 16;
      __green = rgbObject.g / 16;
      __blue = rgbObject.b  / 16;
     
-     Serial_printf("Target color value = %d - %d - %d\n", __red, __green, __blue);
+     //Serial_printf("Target color value = %d - %d - %d\n", __red, __green, __blue);
      
      //This color should be used as reference for the loop
      referenceColor[0] = __red;
@@ -93,10 +96,13 @@ void loop()
      newColor[2] = ;
      */
      
-     //Hardcoded red
-     newColor[0] = 190;
+     //DEBUGGING CODE, REMOVE AFTER USAGE
+     //-----------------------------------------------------------------------------------------------
+     newColor[0] = 220;
      newColor[1] = 40;
      newColor[2] = 50;
+     wasPerson=true; //Simulate Person remaining on the chair
+     //-----------------------------------------------------------------------------------------------
      
      //After calculations set the color of the chair to the new color
      LED1.set_Color(LEDArray, newColor);
@@ -104,20 +110,37 @@ void loop()
    }
    else if(isPerson == true && wasPerson == true)  //Person still sitting there
    {
+     Serial_printf("PERSON CONTINUES TO SIT");
      // Increment brightness
      //LED1.set_Color(LEDArray, newColor);
      //change intermediate color variable by convert to HSB and add standard brightnessvalue
-     if(newColor[1] < 255)
+     
+          //DEBUGGING CODE, REMOVE AFTER USAGE
+     //-----------------------------------------------------------------------------------------------
+     if(newColor[0] < 255)
      {
-       newColor[1] = newColor[1] + 1;
+       newColor[0] = newColor[0] + 1;
+       newColor[1] = newColor[1] - 1;
+       newColor[2] = newColor[2] - 1;
+     }else
+     {
+       delay(1000);
+       isPerson = false; //Simulate person leaving chair
+       wasPerson = true;
      }
+     //-----------------------------------------------------------------------------------------------
+     
+     //Serial_printf("RGB is : %d - %d - %d", newColor[0], newColor[1], newColor[2]);
+     LED1.set_Color(LEDArray, newColor);
      delay(colorChangeDelay);
      
    }else if (isPerson == false && wasPerson == true)
    {
+     Serial_printf("PERSON LEFT");
      // If person no longer sitting, decrement brightness after delay
      // Delay could be added here
      
+     //Serial_printf("RGB after leave = %d - %d - %d", newColor[0], newColor[1], newColor[2]);
      //Fade out color
      for(int i=0; i<3; i++)
      {
