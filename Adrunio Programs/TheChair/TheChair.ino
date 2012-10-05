@@ -115,19 +115,31 @@ void loop()
      //LED1.set_Color(LEDArray, newColor);
      //change intermediate color variable by convert to HSB and add standard brightnessvalue
      
-          //DEBUGGING CODE, REMOVE AFTER USAGE
+     // PLAN B
      //-----------------------------------------------------------------------------------------------
-     if(newColor[0] < 255)
-     {
-       newColor[0] = newColor[0] + 1;
-       newColor[1] = newColor[1] - 1;
-       newColor[2] = newColor[2] - 1;
-     }else
-     {
-       delay(1000);
-       isPerson = false; //Simulate person leaving chair
-       wasPerson = true;
-     }
+       
+       // Find the biggest value and maximize it
+       String maximumIndex = 0;
+       String maximumValue = __red;
+
+       if(__green > maximumValue)
+         maximumIndex = 1;
+       if(__blue > maximumValue)
+         maximumIndex = 2;
+         
+       newColor[maximumIndex] = 255;
+       
+       // Find the biggest value and zero it
+       String minimumIndex = 0;
+       String minimumValue = __red;
+
+       if(__green < minimumValue)
+         minimumIndex = 1;
+       if(__blue < minimumValue)
+         minimumIndex = 2;
+         
+       newColor[minimumIndex] = 0;
+        
      //-----------------------------------------------------------------------------------------------
      
      //Serial_printf("RGB is : %d - %d - %d", newColor[0], newColor[1], newColor[2]);
