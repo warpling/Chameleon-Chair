@@ -19,7 +19,7 @@ int sensorValue;
 PersonDetector::PersonDetector(byte _tempSensorPin)
 {
 	SENSOR_PIN = _tempSensorPin;
-    pinMode(SENSOR_PIN, INPUT);
+  pinMode(SENSOR_PIN, INPUT);
 }
 
 byte PersonDetector::getThermistorPin()
@@ -35,7 +35,7 @@ void PersonDetector::calibrate(int addedHeatOfPerson)
     Serial.print("Calibrating");
 
     // calibrate room temperature during the first three seconds 
-    while (millis() < 3000) {
+    while (millis() < 1500) {
       
       sensorValue = analogRead(SENSOR_PIN);
      
