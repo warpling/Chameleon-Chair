@@ -1,4 +1,4 @@
-  
+#include <Printf.h>
 #include <LED.h>
 
 // Serial Communication
@@ -9,6 +9,10 @@ byte index  = 0; // Index into array; where to store the character
 // LEDs
 int LEDArray[] = {9, 10, 11}; // Red, Green, Blue
 LED LEDs(LEDArray);
+
+// Fade times
+const int colorFadeTime = 30; // 3 seconds
+const int offFadeTime = 50;   // 5 seconds
 
 // Some colors
 byte off[] = {0, 0, 0};
@@ -31,35 +35,38 @@ void setup() {
 void loop() {
   
     if (Comp("red") == 0) {
-        Serial.print("Fading to red... (3 seconds) ");
+        Serial_printf("Fading to red... (%d seconds) ", (colorFadeTime/10));
         previousColor = targetColor;
         targetColor = red;
         
-        LEDs.Fade(LEDArray, previousColor, targetColor, 30); 
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
     }
     else if (Comp("green") == 0) {
-        Serial.print("Fading to green... (3 seconds) \n");
+        Serial_printf("Fading to green... (%d seconds) ", (colorFadeTime/10));
         previousColor = targetColor;
         targetColor = green;
         
-        LEDs.Fade(LEDArray, previousColor, targetColor, 30); 
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
     }
     else if (Comp("blue") == 0) {
-        Serial.print("Fading to blue... (3 seconds) \n");
+        Serial_printf("Fading to blue... (%d seconds) ", (colorFadeTime/10));
         previousColor = targetColor;
         targetColor = blue;
         
-        LEDs.Fade(LEDArray, previousColor, targetColor, 30); 
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
     }
     else if (Comp("off") == 0) {
-        Serial.print("Fading off... (5 seconds) \n");
+        Serial_printf("Fading off... (%d seconds) ", (offFadeTime/10));
         previousColor = targetColor;
         targetColor = off;
         
-        LEDs.Fade(LEDArray, previousColor, targetColor, 50); 
+        LEDs.Fade(LEDArray, previousColor, targetColor, offFadeTime);
+        // Without this, the LEDs never FULLY shut off
+        LEDs.set_Color(LEDArray, off);
+ 
         Serial.println(" Done!");
     }
     else {
