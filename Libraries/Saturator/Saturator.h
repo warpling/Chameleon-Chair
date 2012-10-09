@@ -12,6 +12,9 @@
 #ifndef Saturator_h
 #define Saturator_h
 
+#include <Printf.h>
+#include <stdint.h>
+
 #define MIN3(x,y,z)  ((y) <= (z) ? \
                          ((x) <= (y) ? (x) : (y)) \
                      : \
