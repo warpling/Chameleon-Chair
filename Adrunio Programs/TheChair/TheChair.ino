@@ -13,11 +13,11 @@
 
 // Pins
 // 1. ColorDetector
-const int LEDflash = 13;
-const int Range    = 6;
-const int Gate     = 7;
-const int CK       = 8;
-const int DataIn   = 3;
+const int LEDflash = 6;
+const int Range    = 3;
+const int Gate     = 5;
+const int CK       = 4;
+const int DataIn   = 2;
 RGB rgbObject                 = {0, 0, 0};
 rgb_color saturated_rgb_color = {0, 0, 0};
 
