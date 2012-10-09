@@ -1,0 +1,113 @@
+  
+#include <LED.h>
+
+// Serial Communication
+char inData[20]; // Allocate some space for the string
+char inChar = -1; // Where to store the character read
+byte index  = 0; // Index into array; where to store the character
+
+// LEDs
+int LEDArray[] = {9, 10, 11}; // Red, Green, Blue
+LED LEDs(LEDArray);
+
+// Some colors
+byte off[] = {0, 0, 0};
+byte red[] = {255, 0, 0};
+byte green[] = {0, 255, 0};
+byte blue[] = {0, 0, 255};
+
+// Previous and target colors
+byte *previousColor;
+byte *targetColor;
+
+void setup() {
+  Serial.begin(9600);
+  previousColor = off;
+  targetColor = off;
+  
+  LEDs.set_Color(LEDArray, targetColor);
+}
+
+void loop() {
+  
+    if (Comp("red") == 0) {
+        Serial.print("Fading to red... (3 seconds) ");
+        previousColor = targetColor;
+        targetColor = red;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, 30); 
+        Serial.println(" Done!");
+    }
+    else if (Comp("green") == 0) {
+        Serial.print("Fading to green... (3 seconds) \n");
+        previousColor = targetColor;
+        targetColor = green;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, 30); 
+        Serial.println(" Done!");
+    }
+    else if (Comp("blue") == 0) {
+        Serial.print("Fading to blue... (3 seconds) \n");
+        previousColor = targetColor;
+        targetColor = blue;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, 30); 
+        Serial.println(" Done!");
+    }
+    else if (Comp("off") == 0) {
+        Serial.print("Fading off... (5 seconds) \n");
+        previousColor = targetColor;
+        targetColor = off;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, 50); 
+        Serial.println(" Done!");
+    }
+    else {
+      Comp("clear");
+    }
+  
+//  LEDs.set_Color(LEDArray, red);
+//  LEDs.Fade(LEDArray, red , green, 10); 
+//  LEDs.Fade(LEDArray, green , blue, 10);
+//  LEDs.Fade(LEDArray, blue , red, 10);
+}
+
+char Comp(char* This) {
+  
+    // Hacky magic keyword to clear read buffer if there's a problem
+    if(strcmp("clear", This) == 0) {      
+        if (strcmp(inData,This)  == 0) {
+        for (int i=0;i<19;i++) {
+            inData[i]=0;
+        }
+        index=0;
+        
+        Serial.println("Cleared read buffer.");
+        return(0);
+      }
+    }
+    
+    while (Serial.available() > 0) // Don't read unless
+                                   // there you know there is data
+    {
+        if(index < 19) // One less than the size of the array
+        {
+            inChar = Serial.read(); // Read a character
+            inData[index] = inChar; // Store it
+            index++; // Increment where to write next
+            inData[index] = '\0'; // Null terminate the string
+        }
+    }
+
+    if (strcmp(inData,This)  == 0) {
+        for (int i=0;i<19;i++) {
+            inData[i]=0;
+        }
+        index=0;
+        return(0);
+    }
+    else {
+        return(1);
+    }
+}
+
