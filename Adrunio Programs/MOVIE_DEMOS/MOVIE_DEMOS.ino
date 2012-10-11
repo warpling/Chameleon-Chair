@@ -20,6 +20,7 @@ byte red[] = {255, 0, 0};
 byte orangeRed[] = {255, 50, 0};
 byte green[] = {0, 255, 0};
 byte blue[] = {0, 0, 255};
+byte purple[] = {80, 0, 200};
 byte teal[] = {50, 0, 255};
 byte white[] = {255, 255, 255};
 
@@ -65,6 +66,14 @@ void loop() {
         Serial_printf("Fading to blue... (%d seconds) ", (colorFadeTime/10));
         previousColor = targetColor;
         targetColor = blue;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
+        Serial.println(" Done!");
+    }
+    else if (Comp("purple") == 0) {
+        Serial_printf("Fading to purple... (%d seconds) ", (colorFadeTime/10));
+        previousColor = targetColor;
+        targetColor = purple;
         
         LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
