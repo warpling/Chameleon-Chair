@@ -8,7 +8,7 @@ byte index  = 0; // Index into array; where to store the character
 
 // LEDs
 int LEDArray[] = {9, 10, 11}; // Red, Green, Blue
-int spotlightArray[]  = {6, 6, 6};   // Hack so we can use the RGB LED library
+int spotlightArray[]  = {6, A1, A1};   // Hack so we can use the RGB LED library
 LED LEDs(LEDArray);
 LED spotlight (spotlightArray);
 
@@ -17,14 +17,14 @@ const int colorFadeTime = 30; // 3 seconds
 const int offFadeTime = 50;   // 5 seconds
 
 // Some colors
-byte off[] = {0, 0, 0};
-byte red[] = {255, 0, 0};
+byte off[]       = {0, 0, 0};
+byte red[]       = {255, 0, 0};
 byte orangeRed[] = {255, 54, 0};
-byte green[] = {0, 255, 0};
-byte blue[] = {0, 0, 255};
-byte purple[] = {120, 0, 200};
-byte teal[] = {0, 255, 220};
-byte white[] = {50, 50, 50};
+byte green[]     = {0, 255, 0};
+byte blue[]      = {0, 0, 255};
+byte purple[]    = {120, 0, 200};
+byte teal[]      = {0, 255, 220};
+byte white[]     = {50, 50, 50};
 
 // Previous and target colors
 byte *previousColor;
@@ -107,9 +107,10 @@ void loop() {
     else if (Comp("pulse") == 0) {
         Serial_printf("Pulsing spotlight... ");
         
-        LEDs.Fade(spotlightArray, off, white, 10);
-        delay(1);
-        LEDs.Fade(spotlightArray, white, off, 10);
+        LEDs.Fade(spotlightArray, off, white, 15);
+        delay(100);
+        Serial.println("fading out");
+        LEDs.Fade(spotlightArray, white, off, 15);
         delay(1);
         
         Serial.println(" Done!");
