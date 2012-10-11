@@ -17,8 +17,11 @@ const int offFadeTime = 50;   // 5 seconds
 // Some colors
 byte off[] = {0, 0, 0};
 byte red[] = {255, 0, 0};
+byte orangeRed[] = {255, 50, 0};
 byte green[] = {0, 255, 0};
 byte blue[] = {0, 0, 255};
+byte teal[] = {50, 0, 255};
+byte white[] = {255, 255, 255};
 
 // Previous and target colors
 byte *previousColor;
@@ -42,6 +45,14 @@ void loop() {
         LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
     }
+    else if (Comp("orangeRed") == 0) {
+        Serial_printf("Fading to orange red... (%d seconds) ", (colorFadeTime/10));
+        previousColor = targetColor;
+        targetColor = orangeRed;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
+        Serial.println(" Done!");
+    }
     else if (Comp("green") == 0) {
         Serial_printf("Fading to green... (%d seconds) ", (colorFadeTime/10));
         previousColor = targetColor;
@@ -58,6 +69,14 @@ void loop() {
         LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
     }
+    else if (Comp("teal") == 0) {
+        Serial_printf("Fading to teal... (%d seconds) ", (colorFadeTime/10));
+        previousColor = targetColor;
+        targetColor = teal;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
+        Serial.println(" Done!");
+    }
     else if (Comp("off") == 0) {
         Serial_printf("Fading off... (%d seconds) ", (offFadeTime/10));
         previousColor = targetColor;
@@ -67,6 +86,14 @@ void loop() {
         // Without this, the LEDs never FULLY shut off
         LEDs.set_Color(LEDArray, off);
  
+        Serial.println(" Done!");
+    }
+    else if (Comp("white") == 0) {
+        Serial_printf("Fading to white... (%d seconds) ", (colorFadeTime/10));
+        previousColor = targetColor;
+        targetColor = white;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
     }
     else {
