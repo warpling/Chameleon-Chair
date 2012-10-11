@@ -17,11 +17,11 @@ const int offFadeTime = 50;   // 5 seconds
 // Some colors
 byte off[] = {0, 0, 0};
 byte red[] = {255, 0, 0};
-byte orangeRed[] = {255, 50, 0};
+byte orangeRed[] = {255, 54, 0};
 byte green[] = {0, 255, 0};
 byte blue[] = {0, 0, 255};
-byte purple[] = {80, 0, 200};
-byte teal[] = {50, 0, 255};
+byte purple[] = {120, 0, 200};
+byte teal[] = {0, 255, 220};
 byte white[] = {255, 255, 255};
 
 // Previous and target colors
@@ -34,6 +34,8 @@ void setup() {
   targetColor = off;
   
   LEDs.set_Color(LEDArray, targetColor);
+  
+  Serial.println("\nColors available: red, orangeRed, green, blue, purple, teal, white, and off\n\n");
 }
 
 void loop() {
