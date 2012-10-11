@@ -14,10 +14,11 @@ void loop() {
 
   
   // Blink
-  LED1.set_Color(LEDArray, offColor);
-  LED1.Fade(LEDArray, off , red, 100); 
-  delay(3000);
-  LED1.Fade(LEDArray, green , blue, 30);
-  delay(3000);
-  LED1.Fade(LEDArray, blue , red, 30);
+  LED1.set_Color(LEDArray, off);
+  LED1.Fade(LEDArray, red , green, 20); 
+  delay(1500);
+  LED1.Fade(LEDArray, green , blue, 20);
+  delay(1500);
+  LED1.Fade(LEDArray, blue , red, 20);
+  delay(1500);
 }
