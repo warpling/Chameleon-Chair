@@ -8,7 +8,7 @@ byte index  = 0; // Index into array; where to store the character
 
 // LEDs
 int LEDArray[] = {9, 10, 11}; // Red, Green, Blue
-int spotlightArray[]  = {6, A1, A1};   // Hack so we can use the RGB LED library
+int spotlightArray[]  = {6, A1, A2};   // Hack so we can use the RGB LED library
 LED LEDs(LEDArray);
 LED spotlight (spotlightArray);
 
@@ -19,12 +19,13 @@ const int offFadeTime = 50;   // 5 seconds
 // Some colors
 byte off[]       = {0, 0, 0};
 byte red[]       = {255, 0, 0};
+byte pink[]      = {255, 0, 130};
 byte orangeRed[] = {255, 54, 0};
 byte green[]     = {0, 255, 0};
 byte blue[]      = {0, 0, 255};
 byte purple[]    = {120, 0, 200};
 byte teal[]      = {0, 255, 220};
-byte white[]     = {50, 50, 50};
+byte white[]     = {255, 255, 255};
 
 // Previous and target colors
 byte *previousColor;
@@ -32,12 +33,18 @@ byte *targetColor;
 
 void setup() {
   Serial.begin(9600);
+  pinMode(9, OUTPUT);     
+  pinMode(10, OUTPUT);     
+  pinMode(11, OUTPUT);     
+  pinMode(6, OUTPUT);     
+
+  
   previousColor = off;
   targetColor = off;
   
   LEDs.set_Color(LEDArray, targetColor);
   
-  Serial.println("\nColors available: red, orangeRed, green, blue, purple, teal, white, and off\n\n");
+  Serial.println("\nColors available: red, pink orangeRed, green, blue, purple, teal, white, off, OFF (instant)\n\n");
 }
 
 void loop() {
@@ -54,6 +61,13 @@ void loop() {
     else if (Comp("orangeRed") == 0) {
         Serial_printf("Fading to orange red... (%d seconds) ", (colorFadeTime/10));
         targetColor = orangeRed;
+        
+        LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
+        Serial.println(" Done!");
+    }
+    else if (Comp("pink") == 0) {
+        Serial_printf("Fading to pink... (%d seconds) ", (colorFadeTime/10));
+        targetColor = pink;
         
         LEDs.Fade(LEDArray, previousColor, targetColor, colorFadeTime); 
         Serial.println(" Done!");
@@ -97,6 +111,14 @@ void loop() {
  
         Serial.println(" Done!");
     }
+    else if (Comp("OFF") == 0) {
+        Serial_printf("TURNING OFF... (0 seconds) ");
+        targetColor = off;
+        
+        LEDs.set_Color(LEDArray, off);
+        
+        Serial.println(" Done!");
+    }
     else if (Comp("white") == 0) {
         Serial_printf("Fading to white... (%d seconds) ", (colorFadeTime/10));
         targetColor = white;
@@ -107,10 +129,10 @@ void loop() {
     else if (Comp("pulse") == 0) {
         Serial_printf("Pulsing spotlight... ");
         
-        LEDs.Fade(spotlightArray, off, white, 15);
+        LEDs.Fade(spotlightArray, off, white, 40);
         delay(100);
         Serial.println("fading out");
-        LEDs.Fade(spotlightArray, white, off, 15);
+        LEDs.Fade(spotlightArray, white, off, 40);
         delay(1);
         
         Serial.println(" Done!");
