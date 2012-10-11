@@ -97,7 +97,6 @@ void loop() {
         Serial.println(" Done!");
     }
     else {
-      Serial.println("You are a failure and cannot spell. Try again.");
       Comp("clear");
     }
   
