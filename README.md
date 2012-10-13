@@ -1,4 +1,4 @@
-Chameleon Chair  (Previously: *Presence Bench Lighting*)
+Chameleon Chair  *(Previously: Presence Bench Lighting)*
 ================
 
 Our project morphed a lot over the past few weeks. We went from wanting to make a public installation in a bustling subway to realizing we had neither the time nor resources to do something so ambitious without at least first creating a small scale prototype. Our original idea was to create a subway bench installment that would light bright RGB LEDs under the seat the longer a user sat and slowly fad away after they left, leaving a sort of mark representing their past presence in time. We intended to study how people interacted with the bench and discovered what was happening as well as how people entering the station right after a subway has left, would react the slowly fading out light left behind.
