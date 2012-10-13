@@ -9,7 +9,7 @@ This chair prototype demonstrates the main action of the bench on a small scale 
 
 
 Original Concept
-================
+----------------
 <img src="https://a248.e.akamai.net/camo.github.com/366636e34f37729fca803dff9aaf9ef3b5cc0be2/687474703a2f2f662e636c2e6c792f6974656d732f306d30743335304e32443269325132423046304f2f42656e6368253230436f6e636570742e706e67">
 
 
