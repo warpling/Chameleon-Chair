@@ -1,16 +1,16 @@
-Presence-Bench-Lighting
+Chameleon Chair (~~Presence Bench~~)
 =======================
 
---Physical Interaction Project at KTH for DH2400. The purpose of this project is to make a ~~public installation of a bench~~ **chair**, which is lit-up different colors with RGB LEDs based on ~~where, and how long people sit on the bench~~ the color of the clothing the sitter is wearing. The color lingers for awhile after the sitter leaves, giving others a sense of that person's past presence as well as temporarilly marking the chair as theirs while they run to the restroom.
+Our project morphed a lot over the past few weeks. We went from wanting to make a public installation in a bustling subway to realizing we had neither the time nor resources to do something so ambitious without at least first creating a small scale prototype. Our original idea was to create a subway bench installment that would light bright RGB LEDs under the seat the longer a user sat and slowly fad away after they left, leaving a sort of mark representing their past presence in time. We intended to study how people interacted with the bench and discovered what was happening as well as how people entering the station right after a subway has left, would react the slowly fading out light left behind.
 
-*(We had to change our project to this version because of time-constraints working with SL to get permisison to work on their subway benches!)*--
+This chair prototype demonstrates the main action of the bench on a small scale and also adds an additional feature: matching the color of the wearer’s shirt/jacket. This video demonstrates the desired action of the chair but is not the final working version.
 
-<img src="http://f.cl.ly/items/0m0t350N2D2i2Q2B0F0O/Bench%20Concept.png"/>
+<iframe src="http://player.vimeo.com/video/51299789?title=1&amp;byline=1&amp;portrait=1" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> <p><a href="http://vimeo.com/51299789">Chameleon Chair</a> from <a href="http://vimeo.com/user293556">Ryan</a> on <a href="http://vimeo.com">Vimeo</a>.</p>
 
---A checklist of some things we need to do to make this project a reality:
+Some of the libraries we created/used to make this project a managable reality:
 <ul>
-	<li>~~Order RGB LEDs, Color sensors, drivers, temperature sensors, wiring, enclosures, etc~~</li>
-	<li>Refine RGB control code, color reading code, temperature readings, calibration, etc</li>
-	<li>Learn how to multiplex analog inputs from sensors, and ouputs to LEDs or get Ardunio Mega?</li>
-	<li>Figure out how to best document people using the chair</li>--
+	<li>A</li>
+	<li>B</li>
+	<li>C</li>
+	<li>D</li>--
 </ul>
